@@ -1,0 +1,55 @@
+-- a. Show the list of courses and the lecturer who teaches the course, in which there is a lecturer assigned to the course
+SELECT c.course_name, l.first_name, l.last_name, l.email
+FROM courses c
+JOIN lecturers l ON c.lecturer_id = l.lecturer_id;
+
+-- b. Show the list of courses in which there is no lecturer assigned to the course
+SELECT c.course_name
+FROM courses c
+LEFT JOIN lecturers l ON c.lecturer_id = l.lecturer_id
+WHERE l.lecturer_id IS NULL;
+
+-- c. Show the list of all courses and the embedded lecturer (where there is no embedded lecturer, NULL will appear in the lecturer's details)
+SELECT c.course_name, l.first_name, l.last_name, l.email
+FROM courses c
+LEFT JOIN lecturers l ON c.lecturer_id = l.lecturer_id;
+
+-- d. Show the list of lecturers and the course they teach, only for the embedded lecturers
+SELECT l.first_name, l.last_name, l.email, c.course_name
+FROM lecturers l
+JOIN courses c ON l.lecturer_id = c.lecturer_id;
+
+-- 1.
+-- e. View the list of lecturers who are not assigned to any course
+SELECT l.first_name, l.last_name, l.email
+FROM lecturers l
+LEFT JOIN courses c ON l.lecturer_id = c.lecturer_id
+WHERE c.course_id IS NULL;
+
+-- f. Show the list of all lecturers and the course they teach (where the lecturer is not embedded)
+SELECT l.first_name, l.last_name, l.email, c.course_name
+FROM lecturers l
+LEFT JOIN courses c ON l.lecturer_id = c.lecturer_id
+
+UNION
+
+SELECT l.first_name, l.last_name, l.email, c.course_name
+FROM courses c
+LEFT JOIN lecturers l ON c.lecturer_id = l.lecturer_id;
+
+-- g. Show the list of all courses and the embedded lecturer (where no lecturer is embedded, NULL will appear in the lecturer's details) 
+-- (together with all the lecturers and the course they teach) (where the lecturer is not inserted into course S, NULL will appear in the course details)
+SELECT c.course_name, l.first_name, l.last_name, l.email
+FROM courses c
+LEFT JOIN lecturers l ON c.lecturer_id = l.lecturer_id
+
+UNION
+
+SELECT c.course_name, l.first_name, l.last_name, l.email
+FROM lecturers l
+LEFT JOIN courses c ON l.lecturer_id = c.lecturer_id;
+
+-- h. Show a list in which each lecturer teaches each of the courses
+SELECT l.first_name, l.last_name, l.email, c.course_name
+FROM lecturers l
+CROSS JOIN courses c;
